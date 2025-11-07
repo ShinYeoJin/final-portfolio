@@ -1,14 +1,19 @@
-import Link from "next/link";
+'use client';
 
-export default function Header() {
-  
+export default function Header({ setRocketDone }) {
   return (
-    <>
-      <header className="w-full container mx-auto flex flex-row justify-between items-center p-2 bg-transparent ">
-        <span>BE LIKE A STAR⭐</span>
-        <Link href={"../components/Section1.jsx"}>Main</Link>
-        <Link href={"../components/Section2.jsx"}>Projects</Link>
-        <Link href={"../components/Section3.jsx"}>Introduce</Link>
-      </header>
-    </>);
+    <header className="w-full flex justify-between items-center p-4 absolute top-0 left-0 z-20">
+      <button
+        onClick={() => setRocketDone(false)}
+        className="hover:scale-105 transition-transform text-white font-bold px-3 py-1 rounded"
+      >
+        BE LIKE A STAR⭐
+      </button>
+      <nav className="flex gap-4 text-white">
+        <a href="#section1" className="hover:font-bold">Main</a>
+        <a href="#section2" className="hover:font-bold">Projects</a>
+        <a href="#section3" className="hover:font-bold">Introduce</a>
+      </nav>
+    </header>
+  );
 }
