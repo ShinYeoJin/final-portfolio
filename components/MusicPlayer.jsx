@@ -3,9 +3,10 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const MusicPlayer = () => {
-  const audioRef = useRef(null);
+  // 타입은 주석으로만 명시
+  const audioRef = useRef(null); // <-- HTMLAudioElement | null 타입 암시
+
   const [muted, setMuted] = useState(false);
-  const [isAllowed, setIsAllowed] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -14,23 +15,13 @@ const MusicPlayer = () => {
     // 저장된 상태 불러오기
     const savedTime = localStorage.getItem("music-current-time");
     const savedMuted = localStorage.getItem("music-muted") === "true";
-    const savedAllowed = localStorage.getItem("music-allowed") === "true";
 
     if (savedTime) audio.currentTime = parseFloat(savedTime);
     audio.muted = savedMuted;
     setMuted(savedMuted);
-    setIsAllowed(savedAllowed);
 
     audio.volume = 0.2;
     audio.loop = true;
-
-    // 사용자가 이전에 재생을 허용한 경우 자동 재생 시도
-    if (savedAllowed) {
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((err) => console.log("자동 재생 차단:", err));
-      }
-    }
 
     // 재생 위치 저장
     const interval = setInterval(() => {
@@ -57,33 +48,30 @@ const MusicPlayer = () => {
     localStorage.setItem("music-muted", (!muted).toString());
   };
 
-  // 음악 재생 허용 (최초 1회만 클릭 필요)
-  const handleAllowMusic = () => {
+  // 재생 버튼 클릭 시 음악 재생
+  const handlePlayMusic = () => {
     const audio = audioRef.current;
     if (!audio) return;
 
+    // 항상 처음부터 재생되도록
+    audio.pause();
+    audio.currentTime = 0;
+
     const playPromise = audio.play();
     if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          localStorage.setItem("music-allowed", "true");
-          setIsAllowed(true);
-        })
-        .catch((err) => console.log("음악 재생 실패:", err));
+      playPromise.catch((err) => console.log("음악 재생 실패:", err));
     }
   };
 
   return (
     <div className="fixed bottom-5 right-5 flex items-center gap-3 bg-white/70 backdrop-blur-md shadow-lg px-4 py-2 rounded-full border border-gray-300">
-      {/* 최초 허용 버튼 (1회만 표시) */}
-      {!isAllowed && (
-        <button
-          onClick={handleAllowMusic}
-          className="bg-blue-500 text-white text-sm px-3 py-1 rounded-full shadow hover:bg-blue-600 transition"
-        >
-          🎵 음악 재생 허용
-        </button>
-      )}
+      {/* 재생 버튼 */}
+      <button
+        onClick={handlePlayMusic}
+        className="bg-blue-500 text-white text-sm px-3 py-1 rounded-full shadow hover:bg-blue-600 transition"
+      >
+        🎵 재생
+      </button>
 
       {/* 음소거 버튼 */}
       <button
@@ -101,7 +89,8 @@ const MusicPlayer = () => {
         )}
       </button>
 
-      <audio ref={audioRef} src="song.mp3" preload="auto" />
+      {/* 오디오 엘리먼트 */}
+      <audio ref={audioRef} src="/song.mp3" preload="auto" />
     </div>
   );
 };
