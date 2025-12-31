@@ -7,6 +7,7 @@ import Section2 from '@/components/Section2';
 import Section3 from '@/components/Section3';
 import Footer from '@/components/Footer';
 
+// useSearchParams를 사용하는 컴포넌트를 직접 export
 export default function HomeContent() {
   const searchParams = useSearchParams();
   const noAnim = searchParams.get("noAnim");
