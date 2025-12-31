@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Section1 from '@/components/Section1';
@@ -7,17 +7,24 @@ import Section2 from '@/components/Section2';
 import Section3 from '@/components/Section3';
 import Footer from '@/components/Footer';
 
-// useSearchParams를 사용하는 컴포넌트를 직접 export
-export default function HomeContent() {
+// useSearchParams를 사용하는 작은 컴포넌트
+function SearchParamsReader({ onNoAnim }) {
   const searchParams = useSearchParams();
   const noAnim = searchParams.get("noAnim");
-  const [rocketDone, setRocketDone] = useState(false);
 
   useEffect(() => {
-    if (noAnim === "true"){
-       setRocketDone((prev)=> true);
+    if (noAnim === "true") {
+      onNoAnim(true);
     }
-  }, [noAnim]);
+  }, [noAnim, onNoAnim]);
+
+  return null;
+}
+
+// 메인 컨텐츠 컴포넌트
+function HomeContentInner() {
+  const [rocketDone, setRocketDone] = useState(false);
+  const [noAnim, setNoAnim] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.location.hash === '#section2') {
@@ -31,23 +38,33 @@ export default function HomeContent() {
   }, []);
 
   return (
-    <div className="relative w-full h-full">
-      {/* Header는 Section1 위에 겹치도록 absolute */}
-      <Header setRocketDone={setRocketDone} />
+    <>
+      <Suspense fallback={null}>
+        <SearchParamsReader onNoAnim={setNoAnim} />
+      </Suspense>
+      <div className="relative w-full h-full">
+        {/* Header는 Section1 위에 겹치도록 absolute */}
+        <Header setRocketDone={setRocketDone} />
 
-      {/* Sections */}
-      <Section1 rocketDone={rocketDone} setRocketDone={setRocketDone} />
-      <Section2 />
-      <Section3 />
-      <Footer />
+        {/* Sections */}
+        <Section1 rocketDone={rocketDone} setRocketDone={setRocketDone} />
+        <Section2 />
+        <Section3 />
+        <Footer />
 
-      {/* 로켓 애니메이션 오버레이 (초기 진입 시만) */}
-      {!rocketDone && noAnim !== "true" && (
-        <div className="fixed top-0 left-0 w-full h-full z-[999] flex justify-center items-center overflow-hidden bg-black">
-          <Section1 rocketDone={rocketDone} setRocketDone={setRocketDone} />
-        </div>
-      )}
-    </div>
+        {/* 로켓 애니메이션 오버레이 (초기 진입 시만) */}
+        {!rocketDone && !noAnim && (
+          <div className="fixed top-0 left-0 w-full h-full z-[999] flex justify-center items-center overflow-hidden bg-black">
+            <Section1 rocketDone={rocketDone} setRocketDone={setRocketDone} />
+          </div>
+        )}
+      </div>
+    </>
   );
+}
+
+// 최상위 export 컴포넌트
+export default function HomeContent() {
+  return <HomeContentInner />;
 }
 
