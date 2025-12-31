@@ -5,7 +5,6 @@ import Introduce2 from "@/components/Introduce2";
 import Introduce3 from "@/components/Introduce3";
 
 export default function Section3() {
-  // 각 Introduce 박스에 적용할 애니메이션 설정
   const itemVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: (i) => ({
@@ -13,7 +12,7 @@ export default function Section3() {
       y: 0,
       transition: {
         duration: 0.6,
-        delay: i * 0.4, // Introduce1 → Introduce2 → Introduce3 순차적 등장
+        delay: i * 0.4,
         ease: "easeOut",
       },
     }),
@@ -22,12 +21,20 @@ export default function Section3() {
   return (
     <div
       id="section3"
-      className="relative w-full min-h-[400px] flex flex-col justify-center items-center bg-violet-600 gap-[20px] py-[50px]"
+      className="relative w-full min-h-[500px] flex flex-col justify-center items-center bg-[url('/KakaoTalk_2.jpg')] bg-cover bg-center bg-fixed gap-8 py-12 px-4"
     >
-      <h1 className="text-5xl mb-[30px] text-white">🪐 INTRODUCE 🪐</h1>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-6 font-extrabold text-center flex justify-center items-center gap-2">
+        <span className="text-white">🪐</span>
+        <span className="bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
+          INTRODUCE
+        </span>
+        <span className="text-white">🪐</span>
+      </h1>
 
-      {/* Introduce 컴포넌트들을 감싸는 영역 */}
-      <div className="flex flex-row justify-center items-start gap-[200px]">
+
+
+      {/* Introduce 카드 영역 */}
+      <div className="flex flex-col md:flex-row justify-center items-stretch gap-8 md:gap-12 lg:gap-16 w-full max-w-7xl">
         {[Introduce1, Introduce2, Introduce3].map((Introduce, i) => (
           <motion.div
             key={i}
@@ -35,7 +42,8 @@ export default function Section3() {
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }} // 화면에 30% 이상 보이면 실행, 한 번만
+            viewport={{ once: true, amount: 0.3 }}
+            className="flex-1 min-h-[450px]" // 카드 높이 균일
           >
             <Introduce />
           </motion.div>
@@ -43,4 +51,4 @@ export default function Section3() {
       </div>
     </div>
   );
-}       
+}

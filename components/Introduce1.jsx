@@ -1,12 +1,11 @@
-const page = () => {
-    return (<>
-    <article className="w-full flex flex-col justify-start items-center bg-transparent text-white gap-[20px] text-center">
-        <i className="ri-question-mark text-6xl"></i>
-        <div>
-            <h3 className="text-4xl">메인제목</h3>
-            <span className="text-3xl">세부설명</span>
-        </div> 
-    </article></> );
+import IntroduceCard from "./IntroduceCard";
+
+export default function Introduce1() {
+  return (
+    <IntroduceCard
+      icon="ri-question-mark"
+      title={<>모르는 것은<br />두려워하지 않고<br />학습합니다.</>}
+      subtitle={<>새로운 프레임워크나 라이브러리도<br />주저하지 않고 탐구하며,<br />신속하게 습득합니다.</>}
+    />
+  );
 }
- 
-export default page;

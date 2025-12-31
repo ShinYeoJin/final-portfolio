@@ -6,12 +6,14 @@ import { useEffect, useRef, useState } from 'react';
 export default function Section2() {
   // ✅ 각 원마다 다른 글자(label) 추가
   const projects = [
-    { id: 1, path: '/projects/project1', color: '#FF6B6B', label: 'Project 1' },
-    { id: 2, path: '/projects/project2', color: '#4ECDC4', label: 'Project 2' },
-    { id: 3, path: '/projects/project3', color: '#FFD93D', label: 'Project 3' },
-    { id: 4, path: '/projects/project4', color: '#1A535C', label: 'Project 4' },
-    { id: 5, path: '/projects/project5', color: '#FF9F1C', label: 'Project 5' },
+    { id: 1, path: '/projects/project1', gradient: 'linear-gradient(135deg, #FF6B6B, #FFB86C)', label: 'Project 1' },
+    { id: 2, path: '/projects/project2', gradient: 'linear-gradient(135deg, #4ECDC4, #48A9A6)', label: 'Project 2' },
+    { id: 3, path: '/projects/project3', gradient: 'linear-gradient(135deg, #FFD93D, #FF6F61)', label: 'Project 3' },
+    { id: 4, path: '/projects/project4', gradient: 'linear-gradient(135deg, #1A535C, #3C91E6)', label: 'Project 4' },
+    { id: 5, path: '/projects/project5', gradient: 'linear-gradient(135deg, #FF9F1C, #FF4E50)', label: 'Project 5' },
+    { id: 6, path: '/projects/project6', gradient: 'linear-gradient(135deg, #6A82FB, #FC5C7D)', label: 'Project 6' },
   ];
+  
 
   const sectionRef = useRef(null);
   const [sectionSize, setSectionSize] = useState({ w: 0, h: 0 });
@@ -30,19 +32,21 @@ export default function Section2() {
 
   return (
     <section id="section2"
-      ref={sectionRef} className="relative w-full h-screen overflow-hidden bg-[url('../public/KakaoTalk_2.jpg')] bg-cover bg-center z-50"     
+      ref={sectionRef} className="relative w-full h-screen overflow-hidden bg-[url('/KakaoTalk_2.jpg')] bg-cover bg-center bg-fixed z-50"     
     >
       {sectionSize.w > 0 &&
         projects.map((p, i) => {
-          const size = 60 + Math.random() * 60; // 60~120px 랜덤 크기
-          const radiusX = sectionSize.w * 0.3 + Math.random() * sectionSize.w * 0.1;
-          const radiusY = sectionSize.h * 0.3 + Math.random() * sectionSize.h * 0.1;
+          // 반응형 크기 조정: 모바일에서 작게, 데스크탑에서 크게
+          const baseSize = sectionSize.w < 640 ? 40 : sectionSize.w < 1024 ? 50 : 60;
+          const size = baseSize + Math.random() * (baseSize * 0.5);
+          const radiusX = sectionSize.w * 0.25 + Math.random() * sectionSize.w * 0.1;
+          const radiusY = sectionSize.h * 0.25 + Math.random() * sectionSize.h * 0.1;
           const duration = 30 + Math.random() * 15;
 
           return (
             <OrbitingCircle
               key={p.id}
-              color={p.color}
+              gradient={p.gradient}
               href={p.path}
               radiusX={radiusX}
               radiusY={radiusY}
@@ -60,7 +64,7 @@ export default function Section2() {
 }
 
 function OrbitingCircle({
-  color,
+  gradient,
   href,
   radiusX,
   radiusY,
@@ -91,7 +95,7 @@ function OrbitingCircle({
         style={{
           width: size,
           height: size,
-          backgroundColor: color,
+          background: gradient,
         }}
         animate={{
           x: xKeyframes,
@@ -108,7 +112,14 @@ function OrbitingCircle({
           boxShadow: '0 0 25px rgba(0,0,0,0.3)',
         }}
       >
-        {label && <span style={{ fontSize: size * 0.2 }}>{label}</span>}
+        {label && (
+          <span 
+            className="text-xs sm:text-sm md:text-base"
+            style={{ fontSize: Math.max(size * 0.15, 10) }}
+          >
+            {label}
+          </span>
+        )}
       </motion.div>
     </Link>
   );

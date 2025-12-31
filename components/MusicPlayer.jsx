@@ -64,27 +64,29 @@ const MusicPlayer = () => {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 flex items-center gap-3 bg-white/70 backdrop-blur-md shadow-lg px-4 py-2 rounded-full border border-gray-300">
+    <div className="flex items-center gap-2 bg-white/70 backdrop-blur-md shadow-lg px-3 py-1.5 rounded-full border border-gray-300">
       {/* 재생 버튼 */}
       <button
         onClick={handlePlayMusic}
-        className="bg-blue-500 text-white text-sm px-3 py-1 rounded-full shadow hover:bg-blue-600 transition"
+        className="bg-blue-500 text-white text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full shadow hover:bg-blue-600 transition"
+        aria-label="음악 재생"
       >
-        🎵 재생
+        🎵 <span className="hidden sm:inline">재생</span>
       </button>
 
       {/* 음소거 버튼 */}
       <button
         onClick={toggleMute}
-        className="text-gray-700 hover:text-blue-600 transition flex items-center gap-2"
+        className="text-gray-700 hover:text-blue-600 transition flex items-center gap-1"
+        aria-label={muted ? "음소거 해제" : "음소거"}
       >
         {muted ? (
           <>
-            🔇 <span className="text-sm">음소거 해제</span>
+            🔇 <span className="text-xs sm:text-sm hidden sm:inline">음소거 해제</span>
           </>
         ) : (
           <>
-            🔊 <span className="text-sm">음소거</span>
+            🔊 <span className="text-xs sm:text-sm hidden sm:inline">음소거</span>
           </>
         )}
       </button>

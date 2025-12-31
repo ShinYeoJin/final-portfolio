@@ -1,12 +1,11 @@
-const page = () => {
-    return (<>
-    <article className="w-full flex flex-col justify-start items-center bg-transparent text-white gap-[20px] text-center">
-        <i className="ri-repeat-fill text-6xl"></i>
-        <div>
-            <h3 className="text-4xl">메인제목</h3>
-            <span className="text-3xl">세부설명</span>
-        </div> 
-    </article></> );
+import IntroduceCard from "./IntroduceCard";
+
+export default function Introduce3() {
+  return (
+    <IntroduceCard
+      icon="ri-repeat-fill"
+      title={<>문제의 원인을<br />끝까지 파고드는<br />집요함</>}
+      subtitle={<>프론트엔드 개발 과정에서 마주치는<br />오류나 복잡한 요구사항을<br />단순히 넘어가지 않고,<br />원인부터 해결책까지 철저히 분석합니다.</>}
+    />
+  );
 }
- 
-export default page;
