@@ -7,7 +7,8 @@ import Section2 from '@/components/Section2';
 import Section3 from '@/components/Section3';
 import Footer from '@/components/Footer';
 
-export default function Home() {
+// useSearchParams를 사용하는 컴포넌트를 분리
+function HomeContent() {
   const searchParams = useSearchParams();
   const noAnim = searchParams.get("noAnim");
   const [rocketDone, setRocketDone] = useState(false);
@@ -19,7 +20,7 @@ export default function Home() {
   }, [noAnim]);
 
   useEffect(() => {
-    if (window.location.hash === '#section2') {
+    if (typeof window !== 'undefined' && window.location.hash === '#section2') {
       const el = document.getElementById('section2');
       if (el) {
         requestAnimationFrame(() => {
@@ -30,26 +31,34 @@ export default function Home() {
   }, []);
 
   return (
-    <Suspense>
-      <div
-        className="relative w-full h-full"
-      >
-        {/* Header는 Section1 위에 겹치도록 absolute */}
-        <Header setRocketDone={setRocketDone} />
+    <div className="relative w-full h-full">
+      {/* Header는 Section1 위에 겹치도록 absolute */}
+      <Header setRocketDone={setRocketDone} />
 
-        {/* Sections */}
-        <Section1 rocketDone={rocketDone} setRocketDone={setRocketDone} />
-        <Section2 />
-        <Section3 />
-        <Footer />
+      {/* Sections */}
+      <Section1 rocketDone={rocketDone} setRocketDone={setRocketDone} />
+      <Section2 />
+      <Section3 />
+      <Footer />
 
-        {/* 로켓 애니메이션 오버레이 (초기 진입 시만) */}
-        {!rocketDone && noAnim !== "true" && (
-          <div className="fixed top-0 left-0 w-full h-full z-[999] flex justify-center items-center overflow-hidden bg-black">
-            <Section1 rocketDone={rocketDone} setRocketDone={setRocketDone} />
-          </div>
-        )}
+      {/* 로켓 애니메이션 오버레이 (초기 진입 시만) */}
+      {!rocketDone && noAnim !== "true" && (
+        <div className="fixed top-0 left-0 w-full h-full z-[999] flex justify-center items-center overflow-hidden bg-black">
+          <Section1 rocketDone={rocketDone} setRocketDone={setRocketDone} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="relative w-full h-full flex items-center justify-center">
+        <div className="text-center">Loading...</div>
       </div>
+    }>
+      <HomeContent />
     </Suspense>
   );
 }
