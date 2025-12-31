@@ -53,11 +53,7 @@ function HomeContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={
-      <div className="relative w-full h-full flex items-center justify-center">
-        <div className="text-center">Loading...</div>
-      </div>
-    }>
+    <Suspense fallback={<div>Loading...</div>}>
       <HomeContent />
     </Suspense>
   );
